@@ -1,20 +1,17 @@
 import type { NextPage } from "next"
-import Head from "next/head"
+import { useState } from "react"
+import { Controls, Head, Stats } from "components"
 
 const Home: NextPage = () => {
+	const [stats, setStats] = useState([])
+
 	return (
 		<>
-			<Head>
-				<title>Polymerize Assignment</title>
-				<meta
-					name="description"
-					content="Mean, Median and Mode finder - Polymerize Assignment"
-				/>
-				<link rel="icon" href="/favicon.png" />
-			</Head>
+			<Head />
 
-			<main className="w-full h-screen p-12">
-				<h1 className="font-bold text-3xl">Polymerize</h1>
+			<main className="w-full h-screen flex justify-center items-center flex-col gap-12 p-12 text-[#222]">
+				<Stats data={stats} />
+				<Controls />
 			</main>
 		</>
 	)
