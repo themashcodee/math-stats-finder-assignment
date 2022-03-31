@@ -1,17 +1,52 @@
-import React, { ChangeEvent, FormEvent, useState } from "react"
+import React, {
+	ChangeEvent,
+	Dispatch,
+	FormEvent,
+	SetStateAction,
+	useEffect,
+	useState,
+} from "react"
+import { getStats } from "helpers"
+import { Stats } from "types"
 
-type P = {}
+type P = {
+	stats: Stats[]
+	setStats: Dispatch<SetStateAction<Stats[]>>
+}
 
-export const Controls = () => {
+export const Controls = ({ setStats, stats }: P) => {
 	const [number, setNumber] = useState("")
+	const [dataset, setDataset] = useState<number[]>([])
+
+	useEffect(() => {
+		if (dataset.length) setStats(getStats(dataset))
+	}, [dataset, setStats])
 
 	function handleAddNumber(e: FormEvent) {
 		e.preventDefault()
+		if (!stats.length) return alert("Kindly fetch data first")
+		setDataset([...dataset, parseInt(number)])
+		setNumber("")
 	}
 
 	function hanldeNumberChange(e: ChangeEvent<HTMLInputElement>) {
 		const { value } = e.target
 		if (+value > 0 || value === "") setNumber(value)
+	}
+
+	async function fetchData1() {
+		const data: { dataset: number[]; stats: Stats[] } = await (
+			await fetch("/api/stats")
+		).json()
+		setStats(data.stats)
+		setDataset(data.dataset)
+	}
+	async function fetchData2() {
+		const data: { dataset: number[]; stats: Stats[] } = await (
+			await fetch("/api/stats?index=2")
+		).json()
+		setStats(data.stats)
+		setDataset(data.dataset)
 	}
 
 	return (
@@ -22,6 +57,7 @@ export const Controls = () => {
 			>
 				<input
 					type="text"
+					required
 					value={number}
 					maxLength={5}
 					onChange={hanldeNumberChange}
@@ -34,10 +70,16 @@ export const Controls = () => {
 			</form>
 
 			<div className="flex gap-4">
-				<button className="px-3 py-2 bg-orange-400 text-white rounded-md">
+				<button
+					onClick={fetchData1}
+					className="px-3 py-2 bg-orange-400 text-white rounded-md"
+				>
 					Reload Data 1
 				</button>
-				<button className="px-3 py-2 bg-orange-400 text-white rounded-md">
+				<button
+					onClick={fetchData2}
+					className="px-3 py-2 bg-orange-400 text-white rounded-md"
+				>
 					Reload Data 2
 				</button>
 			</div>
