@@ -17,6 +17,7 @@ type P = {
 export const Controls = ({ setStats, stats }: P) => {
 	const [number, setNumber] = useState("")
 	const [dataset, setDataset] = useState<number[]>([])
+	const [loading, setLoading] = useState(false)
 
 	useEffect(() => {
 		if (dataset.length) setStats(getStats(dataset))
@@ -35,18 +36,22 @@ export const Controls = ({ setStats, stats }: P) => {
 	}
 
 	async function fetchData1() {
+		setLoading(true)
 		const data: { dataset: number[]; stats: Stats[] } = await (
 			await fetch("/api/stats")
 		).json()
 		setStats(data.stats)
 		setDataset(data.dataset)
+		setLoading(false)
 	}
 	async function fetchData2() {
+		setLoading(true)
 		const data: { dataset: number[]; stats: Stats[] } = await (
 			await fetch("/api/stats?index=2")
 		).json()
 		setStats(data.stats)
 		setDataset(data.dataset)
+		setLoading(false)
 	}
 
 	return (
@@ -71,16 +76,18 @@ export const Controls = ({ setStats, stats }: P) => {
 
 			<div className="flex gap-4">
 				<button
+					disabled={loading}
 					onClick={fetchData1}
-					className="px-3 py-2 bg-orange-400 text-white rounded-md"
+					className="px-3 py-2 bg-orange-400 text-white rounded-md disabled:opacity-60"
 				>
-					Reload Data 1
+					{loading ? "Loading..." : "Reload data 1"}
 				</button>
 				<button
+					disabled={loading}
 					onClick={fetchData2}
-					className="px-3 py-2 bg-orange-400 text-white rounded-md"
+					className="px-3 py-2 bg-orange-400 text-white rounded-md disabled:opacity-60"
 				>
-					Reload Data 2
+					{loading ? "Loading..." : "Reload data 2"}
 				</button>
 			</div>
 		</div>
