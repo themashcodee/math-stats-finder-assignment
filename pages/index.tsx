@@ -13,8 +13,8 @@ const Home: NextPage = () => {
 				<link rel="icon" href="/favicon.png" />
 			</Head>
 
-			<main>
-				<h1>Polymerize</h1>
+			<main className="w-full h-screen p-12">
+				<h1 className="font-bold text-3xl">Polymerize</h1>
 			</main>
 		</>
 	)
