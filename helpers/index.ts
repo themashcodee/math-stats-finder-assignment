@@ -1,0 +1,5 @@
+export * from "./find-mean"
+export * from "./find-mode"
+export * from "./find-median"
+export * from "./std-deviation"
+export * from "./get-stats"
