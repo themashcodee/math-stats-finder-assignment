@@ -1,5 +1,11 @@
-export interface Stats {
-	id: string
-	name: string
-	value: number
-}
+export type Stats =
+	| {
+			id: string
+			type: "mean" | "median" | "std_deviation"
+			value: number
+	  }
+	| {
+			id: string
+			type: "mode"
+			value: number[]
+	  }
